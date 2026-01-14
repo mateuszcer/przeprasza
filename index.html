@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Przepraszam 🥺</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .container {
+            background: white;
+            border-radius: 30px;
+            padding: 60px 50px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            line-height: 1.3;
+        }
+
+        .cat-image {
+            max-width: 100%;
+            width: 400px;
+            height: auto;
+            border-radius: 20px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: bounceIn 0.6s ease;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-yes:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-no {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .btn-no:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(245, 87, 108, 0.4);
+        }
+
+        .error-message {
+            display: none;
+            color: #f5576c;
+            font-size: 1.5em;
+            margin-top: 20px;
+            font-weight: bold;
+            animation: shake 0.5s ease;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* Explosion effect */
+        .explode {
+            animation: explode 1s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2) rotate(10deg);
+            }
+            100% {
+                transform: scale(0) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .explosion-particle {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        @keyframes particle-explode {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .heart {
+            position: fixed;
+            font-size: 3em;
+            pointer-events: none;
+            animation: float 3s ease-in-out infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
+        }
+
+        .final-message {
+            font-size: 1.8em;
+            color: #667eea;
+            font-weight: bold;
+            margin-top: 20px;
+            animation: pulse 1s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="mainContainer">
+        <!-- Step 1 -->
+        <div class="step active" id="step1">
+            <h1>Czy jesteś na mnie zła?</h1>
+            <div class="buttons">
+                <button class="btn-yes" onclick="answer1('tak')">Tak</button>
+                <button class="btn-no" onclick="answer1('nie')">Nie</button>
+            </div>
+            <div class="error-message" id="error1">Zła odpowiedź</div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step" id="step2">
+            <h1>Lubisz mnie jeszcze?</h1>
+            <img src="sadCat1.png" alt="Sad Cat" class="cat-image">
+            <div class="buttons">
+                <button class="btn-yes" onclick="answer2('tak')">Tak</button>
+                <button class="btn-no" onclick="answer2('nie')">Nie</button>
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step" id="step3">
+            <img src="susCat.png" alt="Sus Cat" class="cat-image">
+            <h1>Czy wybaczysz mi? :(((</h1>
+            <div class="buttons">
+                <button class="btn-yes" onclick="answer3('tak')">Tak</button>
+                <button class="btn-no" onclick="answer3('nie')">Nie</button>
+            </div>
+        </div>
+
+        <!-- Step 4 - Final -->
+        <div class="step" id="step4">
+            <h1>💖 Kocham Cię! 💖</h1>
+            <img src="catLove.png" alt="Love Cat" class="cat-image">
+            <div class="final-message">Dziękuję że mi wybaczyłaś 🥰</div>
+        </div>
+    </div>
+
+    <script>
+        function showStep(stepId) {
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('active');
+            });
+            document.getElementById(stepId).classList.add('active');
+        }
+
+        function answer1(answer) {
+            if (answer === 'nie') {
+                document.getElementById('error1').classList.add('show');
+            } else {
+                document.getElementById('error1').classList.remove('show');
+                showStep('step2');
+            }
+        }
+
+        function answer2(answer) {
+            if (answer === 'nie') {
+                explodePage();
+            } else {
+                showStep('step3');
+            }
+        }
+
+        function answer3(answer) {
+            if (answer === 'nie') {
+                explodePage();
+            } else {
+                showStep('step4');
+                createHearts();
+            }
+        }
+
+        function explodePage() {
+            const container = document.getElementById('mainContainer');
+            container.classList.add('explode');
+            
+            // Create explosion particles
+            const colors = ['#ff0000', '#ff6b00', '#ffa500', '#ffff00', '#ff0066'];
+            const containerRect = container.getBoundingClientRect();
+            const centerX = containerRect.left + containerRect.width / 2;
+            const centerY = containerRect.top + containerRect.height / 2;
+            
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'explosion-particle';
+                particle.style.left = centerX + 'px';
+                particle.style.top = centerY + 'px';
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                
+                const angle = (Math.PI * 2 * i) / 50;
+                const velocity = 200 + Math.random() * 300;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+                
+                particle.style.setProperty('--tx', tx + 'px');
+                particle.style.setProperty('--ty', ty + 'px');
+                particle.style.animation = `particle-explode 1s ease-out forwards`;
+                
+                document.body.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 1000);
+            }
+            
+            // Shake the whole page
+            document.body.style.animation = 'shake 0.5s ease';
+            
+            // Reset after explosion
+            setTimeout(() => {
+                container.classList.remove('explode');
+                container.style.transform = 'scale(1)';
+                document.body.style.animation = '';
+            }, 1000);
+        }
+
+        function createHearts() {
+            const hearts = ['💗', '💖', '💕', '💝', '❤️', '💓'];
+            
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.top = Math.random() * 100 + '%';
+                    heart.style.animationDelay = Math.random() * 2 + 's';
+                    document.body.appendChild(heart);
+                    
+                    setTimeout(() => heart.remove(), 5000);
+                }, i * 200);
+            }
+        }
+    </script>
+</body>
+</html>
+
